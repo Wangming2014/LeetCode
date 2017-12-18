@@ -358,8 +358,152 @@ public func isHappy(_ n: Int) -> Bool {
     return false
 }
 
+public func findAnagrams(_ s: String, _ p: String) -> [Int] {
+    var returnValue: [Int] = []
+    guard s.count >= p.count else {
+        return returnValue
+    }
+    
+    var map: [Character: Int] = [:]
+    for char in p {
+        map[char] = (map[char] ?? 0) + 1
+    }
+    print("map: \(map)")
+    
+    var left = 0
+    var right = 0
+    var counter = map.count
+    
+    let sArray = Array(s)
+    while right < sArray.count {
+        let char = sArray[right]
+        print("right: \(right), char: \(char)")
+        
+        if let value = map[char] {
+            print("right char frequence: \(value), decrease 1: \(value - 1)")
+            map[char] = value - 1
+            if map[char]! == 0 {
+                counter -= 1
+            }
+        }
+        right += 1
+        
+        print("counter: \(counter)")
+        
+        while counter == 0 {
+            let tmpChar = sArray[left]
+            print("left: \(left), char: \(tmpChar)")
+            if let value = map[tmpChar] {
+                print("left char frequence: \(value), increase 1: \(value + 1)")
+                map[tmpChar] = value + 1
+                if map[tmpChar]! > 0 {
+                    counter += 1
+                }
+            }
+            
+            print("right - left: \(right - left)")
+            if right - left == p.count {
+                returnValue.append(left)
+            }
+            
+            left += 1
+            print("inner counter: \(counter)")
+        }
+    }
+    return returnValue
+}
 
+public func findAnagrams2(_ s: String, _ p: String) -> [Int] {
+    var returnValue: [Int] = []
+    guard s.count >= p.count else {
+        return returnValue
+    }
+    
+    var hash: [Int] = Array(repeating: 0, count: 256)
+    for char in p {
+        hash[char.ascii] += 1
+    }
+    
+    var left = 0, right = 0, counter = p.count
+    print("counter: \(counter)")
+    let sArray = Array(s)
+    while right < sArray.count {
+        let char = sArray[right]
+        print("right: \(right), char: \(char), frequence: \(hash[char.ascii]), decrease: \(hash[char.ascii] - 1)")
+        if hash[char.ascii] >= 1 {
+            counter -= 1
+        }
+        hash[char.ascii] -= 1
+        right += 1
+        print("counter: \(counter)")
+        
+        if counter == 0 {
+            returnValue.append(left)
+        }
+        
+        if right - left == p.count {
+            let char = sArray[left]
+            print("left: \(left), char: \(char), frequence: \(hash[char.ascii]), increase: \(hash[char.ascii] + 1)")
+            if hash[char.ascii] >= 0 {
+                counter += 1
+            }
+            hash[char.ascii] += 1
+            left += 1
+            print("counter: \(counter)")
+        }
+    }
+    return returnValue
+}
 
+public func findDuplicate(_ paths: [String]) -> [[String]] {
+    
+    func allFiles(at path: String) -> [[String: String]] {
+        var returnValue: [[String: String]] = []
+        let array = path.split(separator: " ")
+        let directory = array.first
+        guard directory != nil else {
+            return returnValue
+        }
+        for i in 1..<array.count {
+            let list = array[i].split(separator: "(")
+            let fileName = list.first
+            let fileContent = list.last?.dropLast()
+            
+            if let name = fileName, let content = fileContent {
+                let filePath = directory! + "/" + name
+                returnValue.append([String(content): String(filePath)])
+            }
+        }
+        return returnValue
+    }
+    
+    
+    var files: [[String: String]] = []
+    for path in paths {
+        let array = allFiles(at: path)
+        print(array)
+        print("")
+        files.append(contentsOf: array)
+    }
+    
+    var map: [String: [String]] = [:]
+    for file in files {
+        for (key, value) in file {
+            if map[key] == nil {
+                map[key] = []
+            }
+            map[key]!.append(value)
+        }
+    }
+    
+    var returnValue: [[String]] = []
+    for (_, value) in map {
+        if value.count > 1 {
+            returnValue.append(value)
+        }
+    }
+    return returnValue
+}
 
 
 
@@ -371,6 +515,12 @@ public extension Character {
     public var unicodeScalarCodePoint: UInt32 {
         get {
             return unicodeScalars.first!.value
+        }
+    }
+    
+    public var ascii: Int {
+        get {
+            return Int(unicodeScalarCodePoint)
         }
     }
 }

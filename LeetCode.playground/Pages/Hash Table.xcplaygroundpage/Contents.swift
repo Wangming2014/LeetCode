@@ -68,4 +68,24 @@ example("numberOfBoomerangs") {
     print(result2)
 }
 
+example("findAnagrams") {
+    let result = findAnagrams("cbaebabacd", "abc")
+    print(result)
+}
+
+example("findAnagrams2") {
+    let result = findAnagrams2("cbaebabacd", "abca")
+    print(result)
+}
+
+example("sqrt") {
+    let res = sqrt(4)
+    print(res)
+}
+
+example("findDuplicate") {
+    let input = ["root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)"]
+    let res = findDuplicate(input)
+    print(res)
+}
 

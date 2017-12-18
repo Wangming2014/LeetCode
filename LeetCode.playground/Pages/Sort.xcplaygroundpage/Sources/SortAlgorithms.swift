@@ -212,6 +212,25 @@ public func quickSort(_ array: inout [Int]) {
     recursive(&array, 0, array.count - 1)
 }
 
+/*
+ 选择排序：在无序序列中选取最小值，并放在有序序列的最后
+ 不稳定排序
+ 时间复杂度：
+ O(n ^ 2)
+ */
+public func selectionSort(_ array: inout [Int]) {
+    // 一开始是没有有序序列的，我们认为第一个元素就是一个有序序列
+    for i in 0..<array.count - 1 {
+        var min = i
+        // 从i+1后面的元素都是无序的
+        for j in (i + 1)..<array.count {
+            if array[j] < array[min] {
+                min = j
+            }
+        }
+        array.swapAt(min, i)
+    }
+}
 
 
 

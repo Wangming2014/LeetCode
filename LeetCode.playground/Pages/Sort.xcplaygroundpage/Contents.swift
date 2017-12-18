@@ -22,3 +22,8 @@ example("Quick Sort") {
     var array = [10, 5, 9, 4, 8, 3, 7, 2, 6, 1, 10, 1, 100, 50, 88, 99, 12]
     quickSort(&array)
 }
+
+example("Selection Sort") {
+    var array = [10, 5, 9, 4, 8, 3, 7, 2, 6, 1, 10, 1, 100, 50, 88, 99, 12]
+    selectionSort(&array)
+}
